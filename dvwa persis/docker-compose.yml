@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  dvwa:
+    image: vulnerables/web-dvwa
+    container_name: dvwa
+    restart: always
+    depends_on:
+      - db
+    environment:
+      - MYSQL_HOST=db
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=root
+      - MYSQL_DATABASE=dvwa
+    networks:
+      - dvwa_net
+    volumes:
+      - dvwa_app_data:/var/www/html
+
+  db:
+    image: mysql:5.7  # You can also use mariadb:10.5 if preferred
+    container_name: dvwa-db
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=dvwa
+      - TZ=Asia/Jakarta
+    volumes:
+      - dvwa_db_data:/var/lib/mysql
+    networks:
+      - dvwa_net
+      
+
+  nginx:
+    image: encircle/nginx-modsec
+    container_name: dvwa-nginx
+    restart: always
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro 
+      - ./modsec:/etc/nginx/modsec:rw
+      - ./logs/modsec_audit.log:/var/log/nginx/modsec_audit.log:rw
+    ports:
+      - "9090:80"
+    depends_on:
+      - dvwa
+    networks:
+      - dvwa_net
+    environment:
+      - TZ=Asia/Jakarta
+
+
+networks:
+  dvwa_net:
+    driver: bridge
+
+volumes:
+  dvwa_db_data:
+  dvwa_app_data:

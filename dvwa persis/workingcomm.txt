@@ -1,0 +1,7 @@
+curl.exe -I http://127.0.0.1:9090
+Invoke-WebRequest -Uri "http://localhost:9090/?id=1' OR '1'='1" -Method HEAD
+
+#to check logs from docker  
+docker logs -f dvwa-nginx
+
+
