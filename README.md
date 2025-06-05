@@ -11,7 +11,7 @@
 
 ### 1. Clone this repository
 ```bash
-git clone https://github.com/nikolkol/ANGuard-Thesis.git
+git clone [https://github.com/nikolkol/ANGuard---Final---Thesis.git]
 cd ANGuard-Thesis
 ```
 
